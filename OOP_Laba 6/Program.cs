@@ -22,16 +22,18 @@ namespace OOP_Laba_6
 
     public class Model
     {
+        public Color object_color;//Цвет объекта
+        public PictureBox pb; //Для передачи размера формы для рисования
         protected int RADIX; //Радиус окружности/Вписанной в квадрат окружности/Длина стороны треугольника
         protected Point location; //Точка центра объекта
         protected bool detail;    //Маркер выделенности
-        public Color object_color;//Цвет объекта
 
 
 
-        public Model(Point location, Color color)
+        public Model(Point location, Color color, PictureBox pb)
         {
             RADIX = 40;
+            this.pb = pb;
             this.location = location;
             detail = true;
             object_color = color;
@@ -76,8 +78,8 @@ namespace OOP_Laba_6
 
         public bool check_Location(int point_X, int point_Y, int RADIX) //проверка на выход за границу для круга/квадрата
         {
-            if ((point_X - RADIX >= 2) & (point_X + RADIX <= 736) &
-                (point_Y - RADIX >= 2) & (point_Y + RADIX <= 478))
+            if ((point_X - RADIX >= 0) & (point_X + RADIX <= pb.Width) &
+                (point_Y - RADIX >= 0) & (point_Y + RADIX <= pb.Height))
                 return true;
             return false;
         }
@@ -89,30 +91,27 @@ namespace OOP_Laba_6
         //private int RADIX = 40; //Радиус круга
 
 
-        public CCircle(Point location, Color color) : base(location, color) { }
+        public CCircle(Point location, Color color, PictureBox pb) : base(location, color, pb) { }
 
 
         public override void OnPaint(PaintEventArgs e)//Отрисовка Эллипса
         {
-            if (detail == false)
-                e.Graphics.DrawEllipse(new Pen(object_color, 4f), location.X - RADIX, location.Y - RADIX, RADIX * 2, RADIX * 2);
+            Pen pen = new Pen(object_color);
+            if (detail)
+                pen.Width = 7;
             else
-                e.Graphics.DrawEllipse(new Pen(object_color, 7f), location.X - RADIX, location.Y - RADIX, RADIX * 2, RADIX * 2);
+                pen.Width = 4;
+
+            e.Graphics.DrawEllipse(pen, location.X - RADIX, location.Y - RADIX, RADIX * 2, RADIX * 2);
         }
 
 
         public override bool isPicked(MouseEventArgs e, bool controlUp)//попали ли мы в объект
         {
             if (Math.Pow(location.X - e.X, 2) + Math.Pow(location.Y - e.Y, 2) <= Math.Pow(RADIX, 2)
-                & controlUp & detail)
-            {
-                detail = false; //Если попал в круг, а он выделен - снять выделение
-                return true;
-            }
-            if (Math.Pow(location.X - e.X, 2) + Math.Pow(location.Y - e.Y, 2) <= Math.Pow(RADIX, 2)
                 & controlUp)
             {
-                detail = true;//Если попал в круг, а он не выделен - выделить
+                detail = !detail; //Инвертируем выделенность
                 return true;
             }
             return false;//не попал в круг - ниче не делает
@@ -125,15 +124,18 @@ namespace OOP_Laba_6
         //private int RADIX = 40;//Радиус вписанного в квадрат круга(или половина стороны квадрата, кому как нравится)
 
 
-        public CSquare(Point location, Color color) : base(location, color) { }
+        public CSquare(Point location, Color color, PictureBox pb) : base(location, color, pb) { }
 
 
         public override void OnPaint(PaintEventArgs e)//Отрисовка Квадрата
         {
-            if (detail == false)
-                e.Graphics.DrawRectangle(new Pen(object_color, 4f), location.X - RADIX, location.Y - RADIX, RADIX * 2, RADIX * 2);
+            Pen pen = new Pen(object_color);
+            if (detail)
+                pen.Width = 7;
             else
-                e.Graphics.DrawRectangle(new Pen(object_color, 7f), location.X - RADIX, location.Y - RADIX, RADIX * 2, RADIX * 2);
+                pen.Width = 4;
+
+            e.Graphics.DrawRectangle(pen, location.X - RADIX, location.Y - RADIX, RADIX * 2, RADIX * 2);
         }
 
 
@@ -141,16 +143,9 @@ namespace OOP_Laba_6
         {
             if ((e.X <= location.X + RADIX) & (e.X >= location.X - RADIX) &
                 (e.Y <= location.Y + RADIX) & (e.Y >= location.Y - RADIX) &
-                controlUp & detail)
+                controlUp)
             {
-                detail = false; //Если попал в квадрат, а он выделен - снять выделение
-                return true;
-            }
-            if ((e.X <= location.X + RADIX) & (e.X >= location.X - RADIX) &
-                (e.Y <= location.Y + RADIX) & (e.Y >= location.Y - RADIX) &
-                controlUp & detail == false)
-            {
-                detail = true; //Если попал в квадрат, а он не выделен - добавить выделение
+                detail = !detail; //Инвертируем выделенность
                 return true;
             }
             return false;
@@ -164,21 +159,12 @@ namespace OOP_Laba_6
         private Point A; //Координаты Трех точек треугольника
         private Point B;
         private Point C;
-        private Pen pen1;//карандаши для рисовния(один жирный, другой обычный)
-        private Pen pen2;
 
 
-        public Triangle(Point location, Color color) : base(location, color)
+        public Triangle(Point location, Color color, PictureBox pb) : base(location, color,pb)
         {
             RADIX *= 2;
-            A.X = location.X - RADIX / 2;
-            A.Y = (int)(location.Y + Math.Sqrt(3) * RADIX / 6);
-
-            B.X = location.X + RADIX / 2;
-            B.Y = (int)(location.Y + Math.Sqrt(3) * RADIX / 6);
-
-            C.X = location.X;
-            C.Y = (int)(location.Y - Math.Sqrt(3) * RADIX / 3);
+            refreshTriangle();
         }
 
 
@@ -192,14 +178,14 @@ namespace OOP_Laba_6
         //Проверяет, вышел ли треугольник за границы
         private bool check_Borders(int point_aX, int point_cY, int point_aY) //к примеру, point_aX - координата 
         {                                                                    //точки А по оси Х
-            if ((point_aX >= 2) & (point_aX + RADIX <= 736) &
-                (point_cY >= 2) & (point_aY <= 478))
+            if ((point_aX >= 0) & (point_aX + RADIX <= pb.Width) &
+                (point_cY >= 0) & (point_aY <= pb.Height))
                 return true;
             return false;
         }
 
-
-        private void refreshTriangle() //обновляем координаты точек треугольника после каких-то изменений длины стороны
+        //обновляем координаты точек треугольника после каких-то изменений длины стороны
+        private void refreshTriangle() 
         {
             A.X = location.X - RADIX / 2;
             A.Y = (int)(location.Y + Math.Sqrt(3) * RADIX / 6);
@@ -214,23 +200,18 @@ namespace OOP_Laba_6
 
         public override void OnPaint(PaintEventArgs e)//состоит из отрисовки трех линий
         {
-            pen1 = new Pen(object_color, 4f);
-            pen2 = new Pen(object_color, 7f);
-            pen1.StartCap = System.Drawing.Drawing2D.LineCap.Round; //Чтобы линии были более закругленными
-            pen2.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+            Pen pen = new Pen(object_color);
+            pen.StartCap = System.Drawing.Drawing2D.LineCap.Round; //Чтобы линии были более закругленными
 
-            if (detail == false)
-            {
-                e.Graphics.DrawLine(pen1, A.X, A.Y, B.X, B.Y);
-                e.Graphics.DrawLine(pen1, A.X, A.Y, C.X, C.Y);
-                e.Graphics.DrawLine(pen1, B.X, B.Y, C.X, C.Y);
-            }
+            if (detail)
+                pen.Width = 7;
             else
-            {
-                e.Graphics.DrawLine(pen2, A.X, A.Y, B.X, B.Y);
-                e.Graphics.DrawLine(pen2, A.X, A.Y, C.X, C.Y);
-                e.Graphics.DrawLine(pen2, B.X, B.Y, C.X, C.Y);
-            }
+                pen.Width = 4;
+
+            e.Graphics.DrawLine(pen, A.X, A.Y, B.X, B.Y);
+            e.Graphics.DrawLine(pen, A.X, A.Y, C.X, C.Y);
+            e.Graphics.DrawLine(pen, B.X, B.Y, C.X, C.Y);
+
         }
 
 
@@ -238,16 +219,9 @@ namespace OOP_Laba_6
         {
             if ((Triangle_Square(A.X, A.Y, B.X, B.Y, e.X, e.Y) + Triangle_Square(A.X, A.Y, e.X, e.Y, C.X, C.Y) +
                 Triangle_Square(e.X, e.Y, B.X, B.Y, C.X, C.Y) - Triangle_Square(A.X, A.Y, B.X, B.Y, C.X, C.Y) <= 0.01) &
-                controlUp & detail)
-            {
-                detail = false; //Если попал в треугольник, а он выделен - снять выделение
-                return true;
-            }
-            if ((Triangle_Square(A.X, A.Y, B.X, B.Y, e.X, e.Y) + Triangle_Square(A.X, A.Y, e.X, e.Y, C.X, C.Y) +
-                Triangle_Square(e.X, e.Y, B.X, B.Y, C.X, C.Y) - Triangle_Square(A.X, A.Y, B.X, B.Y, C.X, C.Y) <= 0.01) &
                 controlUp)
             {
-                detail = true; //Если попал в треугольник, а он выделен - снять выделение
+                detail = !detail; //Инвертируем выделенность
                 return true;
             }
             return false;

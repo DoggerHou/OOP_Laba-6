@@ -37,10 +37,10 @@ namespace OOP_Laba_6
             this.button_BLUE = new System.Windows.Forms.Button();
             this.button_ColorDialog = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.button_ELLIPSE = new System.Windows.Forms.Button();
             this.button_SQUARE = new System.Windows.Forms.Button();
             this.button_TRIANGLE = new System.Windows.Forms.Button();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -49,6 +49,7 @@ namespace OOP_Laba_6
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.flowLayoutPanel1.Controls.Add(this.button_YELLOW);
             this.flowLayoutPanel1.Controls.Add(this.button_GREEN);
@@ -125,6 +126,7 @@ namespace OOP_Laba_6
             // 
             // flowLayoutPanel2
             // 
+            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.flowLayoutPanel2.Controls.Add(this.button_ELLIPSE);
             this.flowLayoutPanel2.Controls.Add(this.button_SQUARE);
@@ -147,10 +149,10 @@ namespace OOP_Laba_6
             this.button_ELLIPSE.Click += new System.EventHandler(this.button_ELLIPSE_Click);
             // 
             // button_SQUARE
-            //
+            // 
             this.button_SQUARE.BackColor = System.Drawing.Color.DimGray;
-            this.button_SQUARE.Image = global::OOP_Laba_6.Properties.Resources.imgonline_com_ua_Resize_ylx04X1qh5f8O5;
             this.button_SQUARE.ForeColor = System.Drawing.Color.DimGray;
+            this.button_SQUARE.Image = global::OOP_Laba_6.Properties.Resources.imgonline_com_ua_Resize_ylx04X1qh5f8O5;
             this.button_SQUARE.Location = new System.Drawing.Point(69, 3);
             this.button_SQUARE.Name = "button_SQUARE";
             this.button_SQUARE.Size = new System.Drawing.Size(60, 60);
@@ -159,10 +161,10 @@ namespace OOP_Laba_6
             this.button_SQUARE.Click += new System.EventHandler(this.button_ELLIPSE_Click);
             // 
             // button_TRIANGLE
-            //
+            // 
             this.button_TRIANGLE.BackColor = System.Drawing.Color.DimGray;
-            this.button_TRIANGLE.Image = global::OOP_Laba_6.Properties.Resources.Method_Draw_Image;
             this.button_TRIANGLE.ForeColor = System.Drawing.Color.DimGray;
+            this.button_TRIANGLE.Image = global::OOP_Laba_6.Properties.Resources.Method_Draw_Image;
             this.button_TRIANGLE.Location = new System.Drawing.Point(135, 3);
             this.button_TRIANGLE.Name = "button_TRIANGLE";
             this.button_TRIANGLE.Size = new System.Drawing.Size(60, 60);
@@ -173,13 +175,15 @@ namespace OOP_Laba_6
             // pictureBox
             // 
             this.pictureBox.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(985, 592);
+            this.pictureBox.Size = new System.Drawing.Size(1182, 593);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             this.pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
             this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBox.Resize += new System.EventHandler(this.pictureBox_Resize);
             // 
             // Form1
             // 
@@ -196,7 +200,6 @@ namespace OOP_Laba_6
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 

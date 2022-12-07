@@ -19,6 +19,7 @@ namespace OOP_Laba_6
         bool ellipse = true;
         bool square = false;
         bool triangle = false;
+        PictureBox pBox;
 
 
 
@@ -42,14 +43,14 @@ namespace OOP_Laba_6
         {
             this.ActiveControl = null;
             if (ellipse)//Добавление эллипса
-                myStorage.AddObject(new CCircle(e.Location, btn_color), e, controlUp);
+                myStorage.AddObject(new CCircle(e.Location, btn_color, pBox), e, controlUp);
 
             if (square)//добавление квадрата
-                myStorage.AddObject(new CSquare(e.Location, btn_color), e, controlUp);
+                myStorage.AddObject(new CSquare(e.Location, btn_color, pBox), e, controlUp);
             pictureBox.Invalidate();
 
             if (triangle)//добавление треугольника
-                myStorage.AddObject(new Triangle(e.Location, btn_color), e, controlUp);
+                myStorage.AddObject(new Triangle(e.Location, btn_color, pBox), e, controlUp);
             pictureBox.Invalidate();
         }
 
@@ -183,6 +184,15 @@ namespace OOP_Laba_6
                 pictureBox.Invalidate();
             }
             this.ActiveControl = null;
+        }
+
+        private void pictureBox_Resize(object sender, EventArgs e)
+        {
+            pBox = pictureBox;
+            for(int i = myStorage.getSize() - 1; i >= 0; i--)
+            {
+                myStorage.getObject(i).pb = pBox;
+            }
         }
     }
 }
